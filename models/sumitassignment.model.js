@@ -19,7 +19,7 @@ const assignmentSubmissionSchema = new mongoose.Schema({
     },
     marks:{
       type:Number,
-      default:0
+      default:1
     },
    
     
