@@ -298,20 +298,27 @@ exports.attend_assignment=async(req,res)=>{
         if(!assignment_found){
             return res.status(400).json({message:"assignment does not exists"})
         }
-
-        //check if student exists
         let student_found=await student_model.findOne({_id:student_id})
         if(!student_found){
             return res.status(400).json({message:"student does not exists"})
         }
-
-        //create new assignment
+        //marks of a student for submitted assignment
+        let marks=0;
+        //check if answer is correct
+        
+        // for(let i=0;i<assignment_found.questions.length;i++){
+        //     if(assignment_found.questions.options[i]==answer){
+        //         marks++;
+        //     }
+        // }
+     //create new assignment
         const assign_submitted=new assignment_submission_model({
             assignment_id:assignment_id,
             student_id:student_id,
-            answer:answer
-        })  
-
+            answer:answer,
+            marks:marks
+        })
+       
         //save assignment
         let assignment_attended=await assign_submitted.save()
         return res.status(200).json({status:true,message:"attendance created successfully",data: assignment_attended})
@@ -384,6 +391,70 @@ exports.get_all_assignments_of_student=async(req,res)=>{
     }
 
 }
+
+//get attended assignment by student
+exports.get_attended_assignment_by_student=async(req,res)=>{
+    try{
+        const error=express_validator.validationResult(req)
+        if(!error.isEmpty()){
+            return res.status(400).json({error:error.array()})
+        }
+
+        const {_id}=req.body
+
+        if(!_id){
+            return res.status(400).json({message:"student id is required"})
+        }   
+
+        //check if student exists
+        let student_found=await student_model.findOne({_id:_id})
+        if(!student_found){
+            return res.status(400).json({message:"student does not exists"})
+        }
+
+        //get all assignments
+        let assignments=await assignment_submission_model.find({student_id:_id})
+        return res.status(200).json({status:true,message:"assignments fetched successfully",data:assignments})
+
+    }catch(err){
+        return res.status(500).json({status:false,message:err.message})
+
+    }
+
+}
+
+//get perticuler attended assignment by student
+exports.get_perticuler_attended_assignment_by_student=async(req,res)=>{
+    try{
+        const error=express_validator.validationResult(req)
+        if(!error.isEmpty()){
+            return res.status(400).json({error:error.array()})
+        }
+
+        const {_id,attended_assignment_id}=req.body
+
+        if(!_id){
+            return res.status(400).json({message:"student id is required"})
+        }   
+
+        //check if student exists
+        let student_found=await student_model.findOne({_id:_id})
+        if(!student_found){
+            return res.status(400).json({message:"student does not exists"})
+        }
+
+        //get all assignments
+        let assignments=await assignment_submission_model.find({$and:[{student_id:_id},{_id:attended_assignment_id}]})
+        console.log(assignments);
+        return res.status(200).json({status:true,message:"assignments fetched successfully",data:assignments})
+
+    }catch(err){
+        return res.status(500).json({status:false,message:err.message})
+
+    }
+
+}
+
 
 
 

@@ -16,7 +16,11 @@ const assignmentSubmissionSchema = new mongoose.Schema({
     answer:{
       type:String,
       required:true,
-    }
+    },
+    marks:{
+      type:Number,
+      default:0
+    },
    
     
   },{timestamps:true});

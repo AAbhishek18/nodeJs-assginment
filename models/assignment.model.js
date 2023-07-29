@@ -15,7 +15,11 @@ const assignmentSchema = new mongoose.Schema({
   title: { type: String, required: true },
   questions: [{ type: questionSchema, required: false }],
   deadline: { type: Date, required: false },
-  // Other assignment-related fields
+  marks:{
+    type:Number,
+    default:1
+  },
+  total_marks: { type: Number, required: false, min: 0 },
 },{timestamps:true});
 
 module.exports = mongoose.model("Assignment", assignmentSchema);

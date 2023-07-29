@@ -23,6 +23,10 @@ router.post("/submit-assignment",attend_assignment_controller.attend_assignment)
 router.get("/all-assignment-by-faculty",all_assignment_by_faculty.get_all_assignments)
 router.get("/get-assignment-student",controllers.get_all_assignments_of_student)
 
+router.get ("/get-attended-assignment-by-student",controllers.get_attended_assignment_by_student)
+router.get("/get-perticular-assginment-by-student",controllers.get_perticuler_attended_assignment_by_student)
+
+
 
 
 
