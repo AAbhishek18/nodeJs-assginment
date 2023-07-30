@@ -1,25 +1,30 @@
-const mongoose = require("mongoose");
-
-const questionSchema = new mongoose.Schema({
-  question_text: { type: String, required: false },
-  options: [{ type: String, required: false }],
-  correct_answers: [{ type: Number, required: true, min: 0, max: 3 }], // Assuming 4 options (0 to 3)
-});
+const mongoose = require('mongoose');
 
 const assignmentSchema = new mongoose.Schema({
-  faculty_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Faculty",
+  title: {
+    type: String,
     required: true,
   },
-  title: { type: String, required: true },
-  questions: [{ type: questionSchema, required: false }],
-  deadline: { type: Date, required: false },
-  marks:{
-    type:Number,
-    default:1
-  },
-  total_marks: { type: Number, required: false, min: 0 },
+  questions: [
+    {
+      question_text: {
+        type: String,
+        required: true,
+      },
+      options: {
+        type: [String], // Array of options for MCQ
+      },
+      correct_answers: {
+        type: [String], // Array of correct answers for MCQ
+      },
+    },
+  ],
+ assignment_created_by:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+ }
+
 },{timestamps:true});
 
-module.exports = mongoose.model("Assignment", assignmentSchema);
+module.exports = mongoose.model('Assignment', assignmentSchema);
+

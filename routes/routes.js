@@ -1,37 +1,30 @@
+const router = require("express").Router();
+const user_controller = require("../controllers/user.controller");
+const assignment_controller = require("../controllers/assignment.controller");
+///const assignment_controller=require("../controllers/assignment.controller")
 
-const router=require("express").Router()
+router.post("/add-user", user_controller.add_user);
+// router.get(
+//   "/get-student-report/:studentId",
+//   user_controller.get_student_report
+// );
 
-const student_controllers=require("../controllers/controllers")
-const faculty_controllers=require("../controllers/controllers")
-const assignment_controller=require("../controllers/controllers")
-const attend_assignment_controller=require("../controllers/controllers")
-const all_assignment_by_faculty=require("../controllers/controllers")
-const controllers=require("../controllers/controllers")
+router.post("/add-assignment", assignment_controller.add_assignment);
+// router.get(
+//   "/get-assignment/:assignmentId",
+//   assignment_controller.get_assignment
+// );
+//router.get("/get-all-assignment", assignment_controller.get_all_assignment);
 
+router.post("/attend-assignment", assignment_controller.attend_assignment);
+router.get("/get-student-result/:studentId",assignment_controller.get_student_results)
+router.get("/get-assignment-result/:studentId/:assignmentId",assignment_controller.getStudentAssignmentResult)
+router.get("/get-pdf-report/:studentId/:assignmentId",assignment_controller.student_report_generator)
+router.get("/view-all-assignment",assignment_controller.get_all_assignment)
+router.get("/get-particular-assignment",assignment_controller.get_particular_assignment)
 
-//routes
- router.post("/student-register",student_controllers.add_student)
- router.post("/student-login",student_controllers.student_login)
+router.get("/get-all-assignment-by-faculty",assignment_controller.get_all_attended_assignment)
+router.get("/get-perticular-assginment-by-faculty",assignment_controller.get_particular_attended_assignment)
+//outer.post("/attend-assignment-by-student",assignment_controller.attend_assignment_by_student)
 
-router.post("/faculty-register",faculty_controllers.add_faculty)
-router.post("/faculty-login",faculty_controllers.faculty_login)
-
-router.post("/add-assignment",assignment_controller.add_assignment)   
-
-router.post("/submit-assignment",attend_assignment_controller.attend_assignment)
-
-router.get("/all-assignment-by-faculty",all_assignment_by_faculty.get_all_assignments)
-router.get("/get-assignment-student",controllers.get_all_assignments_of_student)
-
-router.get ("/get-attended-assignment-by-student",controllers.get_attended_assignment_by_student)
-router.get("/get-perticular-assginment-by-student",controllers.get_perticuler_attended_assignment_by_student)
-
-
-
-
-
-
-
-
-
-module.exports=router
+module.exports = router;
