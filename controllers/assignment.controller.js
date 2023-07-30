@@ -81,23 +81,21 @@ exports.get_particular_assignment=async (req,res)=>{
 
 exports.get_all_attended_assignment=async (req,res)=>{
     try{
-      const {faculty_id,student_id}=req.body
+      const {faculty_id}=req.body
 
-      let user=await user_model.findById(faculty_id)
+      let assginment=await assignment_model.find(faculty_id)
+      console.log(assginment)
+      if(!assginment){
+          return res.status(404).json({status:false, message:"Assignment not found"})
+      }
     
-      if(user.role=='student'){
-          return res.status(400).json({status:false,message:"Student can not get Assignment!"})
-        }
-        // let assignment=await assignment_model.find({assignment_created_by:user_id})
-        // if(!assignment){
-        //     return res.status(404).json({status:false, message:"Assignment not found"})
-        // }
-        let student_assignment=await user_model.findById(student_id)
-        if(student_assignment.assignmentsAttended.length==0){
-            return res.status(404).json({status:false, message:"No Assignment  found"})
-        }
+      // if(user.role=='student'){
+      //     return res.status(400).json({status:false,message:"Student can not get Assignment!"})
+      //   }
+        
+       
 
-        res.status(200).json({status:true, message: "Assignment found successfully",data:student_assignment.assignmentsAttended });
+        res.status(200).json({status:true, message: "Assignment found successfully",data:assginment });
     }catch(err){
         res.status(500).json({status:false, message:"Failed to find assignment",err:err.message})
     }
@@ -120,13 +118,7 @@ exports.get_particular_attended_assignment=async (req,res)=>{
         }
         //
         const attendedAssignment = student.assignmentsAttended.find((assignment) => assignment._id.toString() === attended_assignment_id);
-        // if(attendedAssignment==-1){
-        //     return res.status(404).json({status:false, message:"No Assignment  found"})
-        // }
         
-        
-        //console.log((assignment) => assignment.assignment._id.toString() === assignment_id)
-       
         if(!attendedAssignment){
             return res.status(404).json({status:false, message:"No Assignment  found"})
         }
