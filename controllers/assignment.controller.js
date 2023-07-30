@@ -29,18 +29,7 @@ exports.add_assignment=async (req,res)=>{
     }
 }
 
-// exports.get_assignment=async (req,res)=>{
-//     try{
-//         const {assignmentId}=req.params;
-//         let assignment=await assignment_model.findById(assignmentId);
-//         if(!assignment){
-//             return res.status(404).json({status:false, message:"Assignment not found"})
-//         }
-//         res.status(200).json({status:true, message: "Assignment found successfully",data:assignment });
-//     }catch(err){
-//         res.status(500).json({status:false, message:"Failed to find assignment",err:err.message})
-//     }
-// }
+
 
 exports.get_all_assignment=async (req,res)=>{
     try{
@@ -79,27 +68,26 @@ exports.get_particular_assignment=async (req,res)=>{
 
 //get all attended assignment by faculty
 
-exports.get_all_attended_assignment=async (req,res)=>{
+exports.get_all_assignment_by_faculty=async (req,res)=>{
     try{
-      const {faculty_id}=req.body
+      const {faculty_id,student_id}=req.body
 
-      let assginment=await assignment_model.find(faculty_id)
-      console.log(assginment)
-      if(!assginment){
-          return res.status(404).json({status:false, message:"Assignment not found"})
-      }
-    
-      // if(user.role=='student'){
-      //     return res.status(400).json({status:false,message:"Student can not get Assignment!"})
-      //   }
-        
-       
+      let user=await user_model.findById(faculty_id)
+      if(user.role=='student'){
+          return res.status(400).json({status:false,message:"Student can not get Assignment!"})
+        }
 
-        res.status(200).json({status:true, message: "Assignment found successfully",data:assginment });
+        let student=await user_model.findById(student_id)
+        if(student.assignmentsAttended.length==0){
+            return res.status(404).json({status:false, message:"No Assignment  found"})
+        }
+        res.status(200).json({status:true, message: "Assignment found successfully",data:student.assignmentsAttended });
     }catch(err){
         res.status(500).json({status:false, message:"Failed to find assignment",err:err.message})
+
     }
-}
+
+  }
 
 //get-perticular-assginment-by-faculty
 exports.get_particular_attended_assignment=async (req,res)=>{
@@ -123,6 +111,23 @@ exports.get_particular_attended_assignment=async (req,res)=>{
             return res.status(404).json({status:false, message:"No Assignment  found"})
         }
         res.status(200).json({status:true, message: "Assignment found successfully",data:attendedAssignment });
+    }catch(err){
+        res.status(500).json({status:false, message:"Failed to find assignment",err:err.message})
+    }
+}
+//get attended assignment by student
+exports.get_all_attended_assignment=async (req,res)=>{
+    try{
+      const {student_id}=req.body
+      let student=await user_model.findById(student_id)
+
+      if(student.role=='faculty'){
+          return res.status(400).json({status:false,message:"Faculty can not get Assignment!"})
+        }
+        if(student.assignmentsAttended.length==0){
+            return res.status(404).json({status:false, message:"No Assignment  found"})
+        }
+        res.status(200).json({status:true, message: "Assignment found successfully",data:student.assignmentsAttended });
     }catch(err){
         res.status(500).json({status:false, message:"Failed to find assignment",err:err.message})
     }

@@ -23,8 +23,8 @@ router.get("/get-pdf-report/:studentId/:assignmentId",assignment_controller.stud
 router.get("/view-all-assignment",assignment_controller.get_all_assignment)
 router.get("/get-particular-assignment",assignment_controller.get_particular_assignment)
 
-router.get("/get-all-assignment-by-faculty",assignment_controller.get_all_attended_assignment)
+router.get("/get-all-assignment-by-faculty",assignment_controller.get_all_assignment_by_faculty)
 router.get("/get-perticular-assginment-by-faculty",assignment_controller.get_particular_attended_assignment)
-//outer.post("/attend-assignment-by-student",assignment_controller.attend_assignment_by_student)
+router.get("/get-attend-assignment-by-student",assignment_controller.get_all_attended_assignment)
 
 module.exports = router;
